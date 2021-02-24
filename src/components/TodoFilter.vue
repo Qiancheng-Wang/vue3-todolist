@@ -1,14 +1,28 @@
 <template>
     <div class="filters">
-        <span class="filters active">All</span>
-        <span class="filters">Done</span>
-        <span class="filters">Todo</span>
+        <span 
+          v-for="filter in filters"
+          :key="filter.value"
+          @click="$emit('change-filter', filter.value)"
+          class="filters"
+          :class="{ active: selected === filter.value }"
+        >{{ filter.label }}</span>
     </div>
 </template>
 
 <script>
 export default {
-    name: "TodoFilter"
+    name: "TodoFilter",
+    props: ['selected'],
+    setup(){
+      const filters = [
+        { label: "All", value: "all"},
+        { label: "Done", value: "done"},
+        { label: "Todo", value: "todo"}
+      ]
+
+      return {filters}
+    }
 }
 </script>
 
@@ -24,6 +38,7 @@ export default {
 .filters .filters {
   margin-right: 14px;
   transition: 0.8s;
+  cursor: pointer;
 }
 
 .filters .filters.active {
