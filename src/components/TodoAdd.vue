@@ -10,26 +10,30 @@
 <script>
 import { ref } from "vue";
 
+function useEmitAddTodo (tid, emit) {
+    const todoContent = ref("");
+
+    const emitAddTodo = () => {
+      const todo = {
+        id: tid,
+        content: todoContent.value,
+        completed: false
+      }
+      emit("add-todo", todo);
+      todoContent.value = ""
+    }
+
+    return {
+      todoContent,
+      emitAddTodo
+    }
+}
+
 export default {
     name: "TodoAdd",
     props: ["tid"],
     setup(props, context){
-      const todoContent = ref("");
-
-      const emitAddTodo = () => {
-        const todo = {
-          id: props.tid,
-          content: todoContent.value,
-          completed: false
-        }
-        context.emit("add-todo", todo);
-        todoContent.value = ""
-      }
-
-      return {
-        todoContent,
-        emitAddTodo
-      }
+      return useEmitAddTodo(props.tid, context.emit)
     }
 }
 </script>
